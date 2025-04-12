@@ -1,0 +1,35 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum SexeUtilisateur {
+  Male
+  Female
+}
+
+model Binome {
+  id          Int      @id @default(autoincrement())
+  Etudaint1   Etudaint @relation("Etudaint1Binome", fields: [etudaint1Id], references: [id])
+  etudaint1Id Int      @unique
+
+  Etudaint2   Etudaint? @relation("Etudaint2Binome", fields: [etudaint2Id], references: [id])
+  etudaint2Id Int?      @unique
+}
+
+model Etudaint {
+  id            Int             @id @default(autoincrement())
+  nom           String
+  prenom        String
+  email         String          @unique
+  matricul      String          @unique
+  sexe          SexeUtilisateur
+  dateNaissance DateTime
+  Binome1       Binome?         @relation("Etudaint1Binome")
+  Binome2       Binome?         @relation("Etudaint2Binome")
+}
