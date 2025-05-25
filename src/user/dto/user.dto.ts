@@ -25,3 +25,11 @@ export class Binome {
   etudaint1Id: number;
   etudaint2Id: number | null;
 }
+
+export class Email {
+  email: string;
+}
+
+export class EmailDto {
+  email: Email[];
+}

@@ -33,3 +33,8 @@ model Etudaint {
   Binome1      Binome?  @relation("Etudaint1Binome")
   Binome2      Binome?  @relation("Etudaint2Binome")
 }
+
+model Emails {
+   id           Int      @id @default(autoincrement())
+   email String @unique
+}

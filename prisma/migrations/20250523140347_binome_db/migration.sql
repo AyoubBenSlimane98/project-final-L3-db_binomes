@@ -23,6 +23,14 @@ CREATE TABLE "Etudaint" (
     CONSTRAINT "Etudaint_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "Emails" (
+    "id" SERIAL NOT NULL,
+    "email" TEXT NOT NULL,
+
+    CONSTRAINT "Emails_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "Binome_etudaint1Id_key" ON "Binome"("etudaint1Id");
 
@@ -34,6 +42,9 @@ CREATE UNIQUE INDEX "Etudaint_email_key" ON "Etudaint"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Etudaint_matricul_key" ON "Etudaint"("matricul");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Emails_email_key" ON "Emails"("email");
 
 -- AddForeignKey
 ALTER TABLE "Binome" ADD CONSTRAINT "Binome_etudaint1Id_fkey" FOREIGN KEY ("etudaint1Id") REFERENCES "Etudaint"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

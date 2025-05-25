@@ -133,6 +133,11 @@ exports.Prisma.EtudaintScalarFieldEnum = {
   dateNaissance: 'dateNaissance'
 };
 
+exports.Prisma.EmailsScalarFieldEnum = {
+  id: 'id',
+  email: 'email'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -154,7 +159,8 @@ exports.SexeUtilisateur = exports.$Enums.SexeUtilisateur = {
 
 exports.Prisma.ModelName = {
   Binome: 'Binome',
-  Etudaint: 'Etudaint'
+  Etudaint: 'Etudaint',
+  Emails: 'Emails'
 };
 
 /**

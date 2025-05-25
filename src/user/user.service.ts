@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { Binome, EtuBinome, UserDto } from './dto/user.dto';
+import { Binome, EmailDto, EtuBinome, UserDto } from './dto/user.dto';
 
 @Injectable()
 export class UserService {
@@ -39,83 +39,6 @@ export class UserService {
       skipDuplicates: true,
     });
   }
-
-  //   async createBinome(etu: EtuBinome) {
-  //     const { matricul1, matricul2 } = etu;
-
-  //     const result = await this.prisma.$transaction(async (prisma) => {
-  //       const etu1 = await prisma.etudaint.findUnique({
-  //         where: { matricul: matricul1 },
-  //         select: { id: true },
-  //       });
-
-  //       if (!etu1) {
-  //         throw new NotFoundException(
-  //           `Student with matricul ${matricul1} not found`,
-  //         );
-  //       }
-
-  //       const existingBinome1 = await prisma.binome.findFirst({
-  //         where: {
-  //           OR: [{ etudaint1Id: etu1.id }, { etudaint2Id: etu1.id }],
-  //         },
-  //       });
-
-  //       if (existingBinome1) {
-  //         throw new ConflictException(
-  //           `Student with matricul ${matricul1} is already in a binôme`,
-  //         );
-  //       }
-
-  //       if (matricul2) {
-  //         const etu2 = await prisma.etudaint.findUnique({
-  //           where: { matricul: matricul2 },
-  //           select: { id: true },
-  //         });
-
-  //         if (!etu2) {
-  //           throw new NotFoundException(
-  //             `Student with matricul ${matricul2} not found`,
-  //           );
-  //         }
-
-  //         const existingBinome2 = await prisma.binome.findFirst({
-  //           where: {
-  //             OR: [{ etudaint1Id: etu2.id }, { etudaint2Id: etu2.id }],
-  //           },
-  //         });
-
-  //         if (existingBinome2) {
-  //           throw new ConflictException(
-  //             `Student with matricul ${matricul2} is already in a binôme`,
-  //           );
-  //         }
-
-  //         await prisma.binome.create({
-  //           data: {
-  //             etudaint1Id: etu1.id,
-  //             etudaint2Id: etu2.id,
-  //           },
-  //         });
-
-  //         return {
-  //           message: 'Binôme created successfully',
-  //         };
-  //       }
-
-  //       await prisma.binome.create({
-  //         data: {
-  //           etudaint1Id: etu1.id,
-  //         },
-  //       });
-
-  //       return {
-  //         message: 'Single created successfully',
-  //       };
-  //     });
-
-  //     return result;
-  //   }
 
   async createBinomes(binomes: EtuBinome[]) {
     const result = await this.prisma.$transaction(async (prisma) => {
@@ -198,5 +121,31 @@ export class UserService {
     });
 
     return result;
+  }
+
+  async createListEmail(emailDto: EmailDto) {
+    const formattedData = emailDto.email.map((e) => ({ email: e.email }));
+    return await this.prisma.emails.createMany({
+      data: formattedData,
+      skipDuplicates: true,
+    });
+  }
+
+  async verifierEmail(email: string) {
+    const emailUser = await this.prisma.emails.findUnique({
+      where: {
+        email,
+      },
+    });
+    if (emailUser) {
+      return {
+        type: 'succes',
+        isValid: true,
+      };
+    }
+    return {
+      type: 'error',
+      isValid: false,
+    };
   }
 }
